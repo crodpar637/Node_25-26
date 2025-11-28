@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h4>Hola desde el Servidor Web Express!!</h4>
+    <script>
+        inicio();
+
+        async function inicio(){
+            let response = await fetch("http://localhost:3001/api/notes");
+
+            let notas = await response.json();
+
+            let texto = "";
+
+            for(let nota of notas){
+                texto += "ID:"  + nota.id + " Content:" + nota.content + " Important:" + nota.important + "\n";
+            }
+
+            console.log("Notas recibidas:\n" + texto);
+        }
+    </script>
+</body>
+</html>
