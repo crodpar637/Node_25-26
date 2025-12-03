@@ -1,23 +1,386 @@
-GET http://localhost:3000/api/componentes
+### Variables
+@baseUrl = http://localhost:3000/api
+@contentType = application/json
+
+### ========== COMPONENTES: GET ==========
+
+### 1. GET - Obtener todos los componentes (éxito 200)
+GET {{baseUrl}}/componentes
 
 ###
 
-GET http://localhost:3000/api/componentes?listado=true
-
-
-###
-
-GET http://localhost:3000/api/componentes?grafica=true
-
-### 
-
-GET http://localhost:3000/api/componentes/2?relations=true
-
-### 
-
-GET http://localhost:3000/api/componentes/2
-
+### 2. GET - Obtener componentes en formato listado (éxito 200)
+GET {{baseUrl}}/componentes?listado=true
 
 ###
 
-GET http://localhost:3000/api/tipos
+### 3. GET - Obtener componentes para gráfica (éxito 200)
+GET {{baseUrl}}/componentes?grafica=true
+
+###
+
+### 4. GET - Obtener componente por ID válido sin relaciones (éxito 200)
+GET {{baseUrl}}/componentes/1
+
+###
+
+### 5. GET - Obtener componente por ID válido con relaciones (éxito 200)
+GET {{baseUrl}}/componentes/1?relations=true
+
+###
+
+### 6. GET - Obtener componente por ID inválido (error 404)
+GET {{baseUrl}}/componentes/99999
+
+###
+
+### 7. GET - Obtener componente por ID inválido con relaciones (error 404)
+GET {{baseUrl}}/componentes/99999?relations=true
+
+###
+
+### 8. GET - Obtener componente con ID no numérico (error 400/404)
+GET {{baseUrl}}/componentes/abc
+
+###
+
+### 9. GET - Obtener componente con ID muy grande (error 404)
+GET {{baseUrl}}/componentes/999999999999999
+
+###
+
+### ========== COMPONENTES: POST ==========
+
+### 10. POST - Crear nuevo componente (éxito 201)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Procesador Intel i9",
+  "descripcion": "Procesador de alto rendimiento",
+  "precio": 599.99,
+  "idtipo": 1
+}
+
+###
+
+### 11. POST - Crear componente sin nombre (error 400/500)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "descripcion": "Sin nombre",
+  "precio": 100.00,
+  "idtipo": 1
+}
+
+###
+
+### 12. POST - Crear componente sin precio (error 400/500)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Memoria RAM",
+  "descripcion": "8GB DDR4",
+  "idtipo": 2
+}
+
+###
+
+### 13. POST - Crear componente sin tipo (error 400/500)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "SSD Samsung",
+  "descripcion": "1TB NVMe",
+  "precio": 150.00
+}
+
+###
+
+### 14. POST - Crear componente con datos vacíos (error 400/500)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+}
+
+###
+
+### 15. POST - Crear componente con tipo inexistente (error 400/500)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Componente Fantasma",
+  "descripcion": "Con tipo que no existe",
+  "precio": 200.00,
+  "idtipo": 99999
+}
+
+###
+
+### 16. POST - Crear componente con precio negativo (posible validación)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Producto Gratis",
+  "descripcion": "Precio negativo",
+  "precio": -50.00,
+  "idtipo": 1
+}
+
+###
+
+### 17. POST - Crear componente con datos extra (debería ignorarlos)
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "GPU NVIDIA RTX",
+  "descripcion": "Tarjeta gráfica",
+  "precio": 799.99,
+  "idtipo": 3,
+  "extra_campo": "esto debería ignorarse",
+  "otro_campo": 12345
+}
+
+###
+
+### ========== COMPONENTES: PUT ==========
+
+### 18. PUT - Actualizar componente existente (éxito 200)
+PUT {{baseUrl}}/componentes/1
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Procesador Intel i9-13900K",
+  "descripcion": "Actualizado",
+  "precio": 649.99,
+  "idtipo": 1
+}
+
+###
+
+### 19. PUT - Actualizar solo nombre (éxito 200)
+PUT {{baseUrl}}/componentes/1
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Procesador Intel i9 UPDATED"
+}
+
+###
+
+### 20. PUT - Actualizar solo precio (éxito 200)
+PUT {{baseUrl}}/componentes/1
+Content-Type: {{contentType}}
+
+{
+  "precio": 699.99
+}
+
+###
+
+### 21. PUT - Actualizar componente inexistente (error 404)
+PUT {{baseUrl}}/componentes/99999
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Componente Fantasma Actualizado"
+}
+
+###
+
+### 22. PUT - Actualizar con datos vacíos (error 400/404)
+PUT {{baseUrl}}/componentes/1
+Content-Type: {{contentType}}
+
+{
+}
+
+###
+
+### 23. PUT - Actualizar con ID inválido (error 400/404)
+PUT {{baseUrl}}/componentes/abc
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Test"
+}
+
+###
+
+### 24. PUT - Actualizar tipo a inexistente (posible error)
+PUT {{baseUrl}}/componentes/1
+Content-Type: {{contentType}}
+
+{
+  "idtipo": 99999
+}
+
+###
+
+### ========== COMPONENTES: DELETE ==========
+
+### 25. DELETE - Eliminar componente existente (éxito 204)
+DELETE {{baseUrl}}/componentes/2
+
+###
+
+### 26. DELETE - Eliminar componente inexistente (error 404)
+DELETE {{baseUrl}}/componentes/99999
+
+###
+
+### 27. DELETE - Eliminar componente con ID inválido (error 400/404)
+DELETE {{baseUrl}}/componentes/abc
+
+###
+
+### 28. DELETE - Eliminar el mismo componente dos veces (204, luego 404)
+DELETE {{baseUrl}}/componentes/3
+
+###
+
+### 29. DELETE - Intentar eliminar nuevamente (debería ser 404)
+DELETE {{baseUrl}}/componentes/3
+
+###
+
+### ========== TIPOS: GET ==========
+
+### 30. GET - Obtener todos los tipos (éxito 200)
+GET {{baseUrl}}/tipos
+
+###
+
+### 31. GET - Obtener tipo por ID válido (éxito 200)
+GET {{baseUrl}}/tipos/1
+
+###
+
+### 32. GET - Obtener tipo por ID inválido (error 404)
+GET {{baseUrl}}/tipos/99999
+
+###
+
+### ========== TIPOS: POST ==========
+
+### 33. POST - Crear nuevo tipo (éxito 201)
+POST {{baseUrl}}/tipos
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Almacenamiento",
+  "descripcion": "Dispositivos de almacenamiento"
+}
+
+###
+
+### 34. POST - Crear tipo sin nombre (error 400/500)
+POST {{baseUrl}}/tipos
+Content-Type: {{contentType}}
+
+{
+  "descripcion": "Sin tipo"
+}
+
+###
+
+### 35. POST - Crear tipo con datos vacíos (error 400/500)
+POST {{baseUrl}}/tipos
+Content-Type: {{contentType}}
+
+{
+}
+
+###
+
+### ========== TIPOS: PUT ==========
+
+### 36. PUT - Actualizar tipo existente (éxito 200)
+PUT {{baseUrl}}/tipos/1
+Content-Type: {{contentType}}
+
+{
+  "tipo": "CPU",
+  "descripcion": "Procesadores centrales"
+}
+
+###
+
+### 37. PUT - Actualizar tipo inexistente (error 404)
+PUT {{baseUrl}}/tipos/99999
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Tipo Fantasma"
+}
+
+###
+
+### 38. PUT - Actualizar tipo con datos vacíos (error 400/404)
+PUT {{baseUrl}}/tipos/1
+Content-Type: {{contentType}}
+
+{
+}
+
+###
+
+### ========== TIPOS: DELETE ==========
+
+### 39. DELETE - Eliminar tipo existente (éxito 204)
+DELETE {{baseUrl}}/tipos/2
+
+###
+
+### 40. DELETE - Eliminar tipo inexistente (error 404)
+DELETE {{baseUrl}}/tipos/99999
+
+###
+
+### 41. DELETE - Eliminar tipo con ID inválido (error 400/404)
+DELETE {{baseUrl}}/tipos/abc
+
+###
+
+### ========== VALIDACIONES ADICIONALES ==========
+
+### 42. GET - Listar y luego verificar listado actualizado
+GET {{baseUrl}}/componentes?listado=true
+
+###
+
+### 43. GET - Gráfica actualizada después de cambios
+GET {{baseUrl}}/componentes?grafica=true
+
+###
+
+### 44. POST - Crear múltiples componentes consecutivos
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Monitor LG 27 Inch",
+  "descripcion": "Monitor IPS",
+  "precio": 299.99,
+  "idtipo": 1
+}
+
+###
+
+### 45. POST - Otro componente más
+POST {{baseUrl}}/componentes
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Teclado Mecánico",
+  "descripcion": "RGB Switches",
+  "precio": 159.99,
+  "idtipo": 1
+}

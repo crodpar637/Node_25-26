@@ -1,35 +1,51 @@
-// Importar librería express --> web server
+// ============================================
+// IMPORTACIONES
+// ============================================
 const express = require("express");
-// Importar librería path, para manejar rutas de ficheros en el servidor
 const path = require("path");
-// Importar libreria CORS
 const cors = require("cors");
-// Importar gestores de rutas
+
+// Rutas de la API
 const componenteRoutes = require("./routes/componenteRoutes");
 const tipoRoutes = require("./routes/tipoRoutes");
 
+// ============================================
+// INICIALIZACIÓN
+// ============================================
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configurar middleware para analizar JSON en las solicitudes
+// ============================================
+// MIDDLEWARE - PARSEO
+// ============================================
 app.use(express.json());
-// Configurar CORS para admitir cualquier origen
+
+// ============================================
+// MIDDLEWARE - CORS
+// ============================================
 app.use(cors());
 
-// Configurar rutas de la API Rest
+// ============================================
+// MIDDLEWARE - ARCHIVOS ESTÁTICOS
+// ============================================
+app.use(express.static(path.join(__dirname, "public")));
+
+// ============================================
+// RUTAS - API REST
+// ============================================
 app.use("/api/componentes", componenteRoutes);
 app.use("/api/tipos", tipoRoutes);
 
-// Configurar el middleware para servir archivos estáticos desde el directorio 'public'
-app.use(express.static(path.join(__dirname, "public")));
-
-// Ruta para manejar las solicitudes al archivo index.html
-// app.get('/', (req, res) => {
+// ============================================
+// RUTAS - SPA (Catch-all)
+// ============================================
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Iniciar el servidor
+// ============================================
+// SERVIDOR
+// ============================================
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });

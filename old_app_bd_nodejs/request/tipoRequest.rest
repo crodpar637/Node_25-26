@@ -1,0 +1,117 @@
+### Variables
+@baseUrl = http://localhost:3000/api/tipos
+@contentType = application/json
+
+### 1. GET - Obtener todos los tipos (éxito 200)
+GET {{baseUrl}}
+
+### 2. GET - Obtener tipo por ID válido (éxito 200)
+GET {{baseUrl}}/1
+
+### 3. GET - Obtener tipo por ID inválido (error 404)
+GET {{baseUrl}}/99999
+
+### 4. POST - Crear nuevo tipo (éxito 201)
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Procesador",
+  "descripcion": "Unidad central de procesamiento"
+}
+
+### 5. POST - Crear tipo sin datos requeridos (error 400/500)
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+}
+
+### 6. POST - Crear tipo con datos incompletos (error 400/500)
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Memoria RAM"
+}
+
+### 7. PUT - Actualizar tipo existente (éxito 200)
+PUT {{baseUrl}}/1
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Procesador Actualizado",
+  "descripcion": "CPU actualizado"
+}
+
+### 8. PUT - Actualizar tipo inexistente (error 404)
+PUT {{baseUrl}}/99999
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Tipo que no existe",
+  "descripcion": "Este tipo no existe"
+}
+
+### 9. PUT - Actualizar con datos vacíos (posible error 400/500)
+PUT {{baseUrl}}/1
+Content-Type: {{contentType}}
+
+{
+}
+
+### 10. DELETE - Eliminar tipo existente (éxito 204)
+DELETE {{baseUrl}}/1
+
+### 11. DELETE - Eliminar tipo inexistente (error 404)
+DELETE {{baseUrl}}/99999
+
+### 12. DELETE - Eliminar tipo con ID inválido (error 400/404)
+DELETE {{baseUrl}}/abc
+
+### 13. GET - Obtener con contenido-type erróneo
+GET {{baseUrl}}
+Content-Type: application/xml
+
+### 14. POST - Crear tipo con tipo duplicado (posible error 400/500)
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Procesador",
+  "descripcion": "Este tipo ya existe"
+}
+
+### 15. GET - Obtener tipo con número de ID muy grande
+GET {{baseUrl}}/999999999999999
+
+### 16. PUT - Actualizar tipo con JSON inválido (error 400)
+PUT {{baseUrl}}/1
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Memoria RAM",
+  "descripcion": "Descripción incompleta"
+  "extra": "sin comilla anterior"
+}
+
+### 17. DELETE - Eliminar múltiples veces (primer 204, segundo 404)
+DELETE {{baseUrl}}/2
+
+### 18. DELETE - Intentar eliminar (segundo intento)
+DELETE {{baseUrl}}/2
+
+### 19. GET - Petición sin autorización (si aplica)
+GET {{baseUrl}}
+Authorization: Bearer token_inválido
+
+### 20. POST - Crear tipo con campos extra (debería ignorarlos)
+POST {{baseUrl}}
+Content-Type: {{contentType}}
+
+{
+  "tipo": "Tarjeta Gráfica",
+  "descripcion": "GPU de alto rendimiento",
+  "extra_campo": "esto debería ignorarse",
+  "otro_campo": 12345
+}
