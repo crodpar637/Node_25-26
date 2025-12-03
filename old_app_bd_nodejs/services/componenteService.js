@@ -1,83 +1,79 @@
-// Ejemplo en dataService.js
+// componenteService.js (refactorizado a async/await)
 const componenteModel = require('../models/componenteModel');
 const { logMensaje } = require('../utils/logger');
 
 class ComponenteService {
-    getAllComponente(callback) {
-        componenteModel.getAllComponente((err, data) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, data);
-            }
-        });
+    async getAllComponente() {
+        try {
+            const data = await componenteModel.getAllComponente();
+            return data;
+        } catch (err) {
+            throw err;
+        }
     }
 
-    getAllComponenteListado(callback) {
-        componenteModel.getAllComponenteListado((err, data) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, data);
-            }
-        });
+    async getAllComponenteListado() {
+        try {
+            const data = await componenteModel.getAllComponenteListado();
+            return data;
+        } catch (err) {
+            throw err;
+        }
     }
 
-    getAllComponenteGrafica(callback) {
-        componenteModel.getAllComponenteGrafica((err, data) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, data);
-            }
-        });
+    async getAllComponenteGrafica() {
+        try {
+            const data = await componenteModel.getAllComponenteGrafica();
+            return data;
+        } catch (err) {
+            throw err;
+        }
     }
 
-    async createComponente(componenteData, callback) {
-        // Aquí podrías realizar validaciones adicionales antes de llamar al modelo
-        // Por ejemplo, verificar si los datos son válidos antes de intentar crear el componente
-
-        componenteModel.createComponente(componenteData, (err, result) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, result);
-            }
-        });
+    async createComponente(componenteData) {
+        try {
+            const result = await componenteModel.createComponente(componenteData);
+            return result;
+        } catch (err) {
+            throw err;
+        }
     }
 
-    async getComponenteById(componenteId, callback) {
-
-        componenteModel.getComponenteById(componenteId, (err, result) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, result);
-            }
-        });
+    async getComponenteById(componenteId) {
+        try {
+            const result = await componenteModel.getComponenteById(componenteId);
+            return result;
+        } catch (err) {
+            throw err;
+        }
     }
 
-    async getComponenteByIdRelations(componenteId, callback) {
-
-        componenteModel.getComponenteByIdRelations(componenteId, (err, result) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, result);
-            }
-        });
+    async getComponenteByIdRelations(componenteId) {
+        try {
+            const result = await componenteModel.getComponenteByIdRelations(componenteId);
+            return result;
+        } catch (err) {
+            throw err;
+        }
     }
 
-    deleteComponente(componenteId, callback) {
-        componenteModel.deleteComponente(componenteId, (err, result) => {
-            if (err) {
-                callback(err, null);
-            } else {
-                callback(null, result.affectedRows); // Número de filas afectadas
-            }
-        });
+    async updateComponente(id, componenteData) {
+        try {
+            const result = await componenteModel.updateComponente(id, componenteData);
+            return result;
+        } catch (err) {
+            throw err;
+        }
     }
 
+    async deleteComponente(componenteId) {
+        try {
+            const result = await componenteModel.deleteComponente(componenteId);
+            return result;
+        } catch (err) {
+            throw err;
+        }
+    }
 
     // Otros métodos del servicio...
 }

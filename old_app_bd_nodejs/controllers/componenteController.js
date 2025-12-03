@@ -6,115 +6,83 @@ const Respuesta = require('../utils/respuesta');
 class ComponenteController {
 
   async getAllComponente(req, res) {
-
-    // Recuperar información de los parámetros de la petición
-    // query puede ser { listado : true } o { grafica : true }
-    const { listado, grafica } = req.query; 
-
-    // Si se trata de un listado (existe el parámetro listado), invoco otro servicio
-    if (listado) {
-      componenteService.getAllComponenteListado((err, data) => {
-        if (err) {
-          res.status(500).json(Respuesta.error(data, 'Error al recuperar los datos:' + req.originalUrl));
-        } else {
-          res.json(Respuesta.exito(data, 'Listado de componentes recuperado'));
-        }
-      });
-    } else if (grafica){  // Se trata de una grafica
-      componenteService.getAllComponenteGrafica((err, data) => {
-        if (err) {
-          res.status(500).json(Respuesta.error(data, 'Error al recuperar los datos:' + req.originalUrl));
-        } else {
-          res.json(Respuesta.exito(data, 'Datos para gráfica de componentes recuperado'));
-        }
-      });
-      
-    } else { // No se trata de un listado ni de una grafica
-      // Implementa la lógica para obtener todos los datos 
-      componenteService.getAllComponente((err, data) => {
-        if (err) {
-          res.status(500).json(Respuesta.error(data, 'Error al recuperar los datos:' + req.originalUrl));
-        } else {
-          res.json(Respuesta.exito(data, 'Datos de componentes recuperados'));
-        }
-      });
+    const { listado, grafica } = req.query;
+    try {
+      if (listado) {
+        const data = await componenteService.getAllComponenteListado();
+        return res.json(Respuesta.exito(data, 'Listado de componentes recuperado'));
+      } else if (grafica) {
+        const data = await componenteService.getAllComponenteGrafica();
+        return res.json(Respuesta.exito(data, 'Datos para gráfica de componentes recuperado'));
+      } else {
+        const data = await componenteService.getAllComponente();
+        return res.json(Respuesta.exito(data, 'Datos de componentes recuperados'));
+      }
+    } catch (err) {
+      return res.status(500).json(Respuesta.error(err, 'Error al recuperar los datos: ' + req.originalUrl));
     }
-  };
+  }
 
   async getComponenteById(req, res) {
-    // Implementa la lógica para obtener un dato por ID
-    // Recuperar información de la query string (?p1=v1&p2=v2)
     const { relations } = req.query;
-    // Recuperar información que vienen en la ruta '/:id'
     const componenteId = req.params.id;
-
-    // Si hay que recuperar los datos relacionados (relations), invoco otro servicio
-    if (relations) {
-
-      componenteService.getComponenteByIdRelations(componenteId, (err, componente) => {
-        if (err) {
-          res.status(500).json(Respuesta.error(componente, 'Error al recuperar los datos:' + req.originalUrl));
-        } else if (componente == null) {
-          logMensaje("Respuesta es:" + JSON.stringify(Respuesta.error(componente, 'Componente no encontrado' + req.originalUrl)))
-          res.status(404).json(Respuesta.error(componente, 'Componente no encontrado: ' + componenteId));
-        } else {
-          res.json(Respuesta.exito(componente, 'Componente recuperado'));
+    try {
+      if (relations) {
+        const componente = await componenteService.getComponenteByIdRelations(componenteId);
+        if (!componente) {
+          logMensaje('Respuesta es:' + JSON.stringify(Respuesta.error(null, 'Componente no encontrado: ' + componenteId)));
+          return res.status(404).json(Respuesta.error(null, 'Componente no encontrado: ' + componenteId));
         }
-      });
-    } else { // No necesito recuperar datos relacionados
-
-      // Implementa la lógica para obtener el componente
-      componenteService.getComponenteById(componenteId, (err, componente) => {
-        if (err) {
-          res.status(500).json(Respuesta.error(componente, 'Error al recuperar los datos:' + req.originalUrl));
-        } else if (componente == null) {
-          res.status(404).json(Respuesta.error(componente, 'Componente no encontrado: ' + componenteId));
-        } else {
-          res.json(Respuesta.exito(componente, 'Componente recuperado'));
+        return res.json(Respuesta.exito(componente, 'Componente recuperado'));
+      } else {
+        const componente = await componenteService.getComponenteById(componenteId);
+        if (!componente) {
+          return res.status(404).json(Respuesta.error(null, 'Componente no encontrado: ' + componenteId));
         }
-      });
+        return res.json(Respuesta.exito(componente, 'Componente recuperado'));
+      }
+    } catch (err) {
+      return res.status(500).json(Respuesta.error(err, 'Error al recuperar los datos: ' + req.originalUrl));
     }
-  };
+  }
 
   async createComponente(req, res) {
-    // Implementa la lógica para crear un nuevo dato
-
-    // Recuperar objeto con el componente a dar de alta
     const componenteData = req.body;
-
-    componenteService.createComponente(componenteData, (err, result) => {
-      if (err) {
-        res.status(500).json(Respuesta.error(result, 'Error al insertar el componente:' + req.originalUrl));
-      } else {
-        // 201: Created
-        res.status(201).json(Respuesta.exito({ insertId: result.insertId }, 'Componente dado de alta'));
-      }
-    });
-
-
-  };
+    try {
+      const result = await componenteService.createComponente(componenteData);
+      return res.status(201).json(Respuesta.exito({ insertId: result.insertId }, 'Componente dado de alta'));
+    } catch (err) {
+      return res.status(500).json(Respuesta.error(err, 'Error al insertar el componente: ' + req.originalUrl));
+    }
+  }
 
   async updateComponente(req, res) {
-    // Implementa la lógica para actualizar un dato por ID
-  };
+    const id = req.params.id;
+    const componenteData = req.body;
+    try {
+      const result = await componenteService.updateComponente(id, componenteData);
+      if (!result || result.affectedRows === 0) {
+        return res.status(404).json(Respuesta.error(null, `Componente con id ${id} no encontrado`));
+      }
+      return res.json(Respuesta.exito(result, 'Componente actualizado correctamente'));
+    } catch (err) {
+      return res.status(500).json(Respuesta.error(err, 'Error al actualizar el componente'));
+    }
+  }
 
   async deleteComponente(req, res) {
-    // Implementa la lógica para eliminar un dato por ID
-    // Recuperar información que vienen en la ruta '/:id'
     const componenteId = req.params.id;
-    // Implementa la lógica para eliminar el componente
-    componenteService.deleteComponente(componenteId, (err, result) => {
-      if (err) {
-          console.error('Error al eliminar componente:', err);
-          res.status(500).json({ error: 'Error interno del servidor' });
-      // } else if (result === 0) {
-      //     res.status(404).json({ error: 'Componente no encontrado' });
-      } else {
-          res.status(204).end(); // 204: No Content
+    try {
+      const result = await componenteService.deleteComponente(componenteId);
+      if (!result || result.affectedRows === 0) {
+        return res.status(404).json(Respuesta.error(null, `Componente con id ${componenteId} no encontrado`));
       }
-  });
-
-  };
+      return res.status(204).end();
+    } catch (err) {
+      console.error('Error al eliminar componente:', err);
+      return res.status(500).json(Respuesta.error(err, 'Error interno del servidor'));
+    }
+  }
 
 }
 

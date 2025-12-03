@@ -8,7 +8,7 @@ module.exports = {
   
     error: (datos,mensaje = 'Error en la operación') => ({
       ok: false,
-      datos: null,
+      datos: datos,
       mensaje: mensaje,
     }),
   };
