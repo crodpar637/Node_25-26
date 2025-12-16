@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // ============================================
 // RUTAS - API REST
 // ============================================
-app.use("/api/director", directorRoutes);
+app.use("/api/directors", directorRoutes);
 
 // ============================================
 // RUTAS - SPA (Catch-all)
