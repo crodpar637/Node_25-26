@@ -37,9 +37,9 @@ app.use("/api/directors", directorRoutes);
 // ============================================
 // RUTAS - SPA (Catch-all)
 // ============================================
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
 
 // ============================================
 // SERVIDOR
