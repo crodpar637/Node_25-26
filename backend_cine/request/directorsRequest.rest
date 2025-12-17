@@ -1,0 +1,2 @@
+### GET /api/directors recupera todos los directores
+GET http://localhost:3000/api/directors
