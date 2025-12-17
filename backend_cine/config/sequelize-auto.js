@@ -1,3 +1,4 @@
+const { logMensaje } = require("../utils/logger.js");
 const SequelizeAuto = require("sequelize-auto");
 // Importar fichero de configuración con variables de entorno
 const config = require('./config');
@@ -24,10 +25,10 @@ const auto = new SequelizeAuto(
 );
 
 auto.run().then((data) => {
-  console.log(data.tables); // table and field list
-  // console.log(data.foreignKeys); // table foreign key list
-  // console.log(data.indexes);     // table indexes
-  // console.log(data.hasTriggerTables); // tables that have triggers
-  // console.log(data.relations);   // relationships between models
-  console.log(data.text); // text of generated models
+  logMensaje(data.tables); // table and field list
+  // logMensaje(data.foreignKeys); // table foreign key list
+  // logMensaje(data.indexes);     // table indexes
+  // logMensaje(data.hasTriggerTables); // tables that have triggers
+  // logMensaje(data.relations);   // relationships between models
+  logMensaje(data.text); // text of generated models
 });

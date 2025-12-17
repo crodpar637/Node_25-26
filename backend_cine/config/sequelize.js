@@ -1,4 +1,5 @@
 // config/sequelize.js
+const { logMensaje } = require("../utils/logger.js");
 const { Sequelize } = require("sequelize");
 // Importar fichero de configuración con variables de entorno
 const config = require("./config");
@@ -27,7 +28,7 @@ const sequelize = new Sequelize(
   try {
     await sequelize.authenticate();
     if (process.env.NODE_ENV !== "test") {
-      console.log("Conexión exitosa a la base de datos MySQL");
+      logMensaje("Conexión exitosa a la base de datos MySQL");
     }
   } catch (error) {
     console.error("Error de conexión:", error);

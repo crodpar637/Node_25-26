@@ -1,2 +1,20 @@
 ### GET /api/directors recupera todos los directores
 GET http://localhost:3000/api/directors
+
+### GET /api/directors/:id recupera un director
+GET http://localhost:3000/api/directors/1
+
+### GET /api/directors/:id recupera un director - NOT FOUND(404)
+GET http://localhost:3000/api/directors/50
+
+### POST /api/directors/ crea un director 
+POST http://localhost:3000/api/directors
+Content-Type: application/json
+
+{
+    "name": "John Ford",
+    "birth_date" : "1880-12-12",
+    "biography" : "Director muy bueno de peliculas del oeste",
+    "photo_url" : "https://goldenglobes.com/wp-content/uploads/2023/11/01-john-ford.jpg?w=2000"
+}
+

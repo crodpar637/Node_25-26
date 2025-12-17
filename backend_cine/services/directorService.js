@@ -16,6 +16,16 @@ class DirectorService {
     const result = await Director.findAll();
     return result;
   }
+   async getDirectorById(id_director) {
+    // Devuelve un director por su id
+    const result = await Director.findByPk(id_director);
+    return result;
+  }
+  async createDirector(director) {
+    //Crea un director
+    const result = await Director.create(director);
+    return result;
+  }
 }
 
 module.exports = new DirectorService();
