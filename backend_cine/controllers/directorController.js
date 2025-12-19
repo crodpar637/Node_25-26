@@ -25,11 +25,13 @@ class DirectorController {
 
     try {
       const directorNew = await directorService.createDirector(director);
+
       return res.status(201).json({
         ok: true,
         datos: directorNew,
         mensaje: "Director creado correctamente",
       });
+    
     } catch (err) {
       logMensaje("Error en createDirector:", err);
       return res.status(500).json({
