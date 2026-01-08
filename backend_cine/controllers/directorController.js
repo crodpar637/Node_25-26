@@ -12,7 +12,7 @@ class DirectorController {
         mensaje: "Directores recuperados correctamente",
       });
     } catch (err) {
-    logMensaje("Error en getAllDirector:", err);
+      logMensaje("Error en getAllDirector:", err);
       return res.status(500).json({
         ok: false,
         datos: null,
@@ -31,7 +31,6 @@ class DirectorController {
         datos: directorNew,
         mensaje: "Director creado correctamente",
       });
-    
     } catch (err) {
       logMensaje("Error en createDirector:", err);
       return res.status(500).json({
@@ -41,6 +40,32 @@ class DirectorController {
       });
     }
   }
+  async deleteDirector(req, res) {
+    const id_director = req.params.id;
+
+    try {
+      const numFilas = await directorService.deleteDirector(id_director);
+
+      if (numFilas == 0) {
+        return res.status(404).json({
+          ok: false,
+          datos: null,
+          mensaje: "Director no encontrado: " + id_director,
+        });
+      } else {
+        // Borrado correcto
+        return res.status(204).send();
+      }
+    } catch (err) {
+      logMensaje("Error en deleteDirector:", err);
+      return res.status(500).json({
+        ok: false,
+        datos: null,
+        mensaje: "Error al borrar un director",
+      });
+    }
+  }
+
   async getDirectorById(req, res) {
     const id_director = req.params.id;
     try {

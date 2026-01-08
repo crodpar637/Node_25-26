@@ -16,7 +16,7 @@ class DirectorService {
     const result = await Director.findAll();
     return result;
   }
-   async getDirectorById(id_director) {
+  async getDirectorById(id_director) {
     // Devuelve un director por su id
     const result = await Director.findByPk(id_director);
     return result;
@@ -25,6 +25,13 @@ class DirectorService {
     //Crea un director
     const result = await Director.create(director);
     return result;
+  }
+  async deleteDirector(id_director) {
+    //Borrar un director
+    const numFilas = await Director.destroy({
+      where: { id_director: id_director },
+    });
+    return numFilas;
   }
 }
 
