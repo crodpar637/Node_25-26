@@ -33,6 +33,20 @@ class DirectorService {
     });
     return numFilas;
   }
+  async updateDirector(director) {
+    //Actualizar un director
+    let numFilas = await Director.update(director, {
+      where: { id_director: director.id_director },
+    });
+    // Si el numero de filas afectadas por la actualización es cero
+    // y existe el registro para ese director, es que no hay cambios en los datos
+    // la actualización
+    if(numFilas == 0 && await Director.findByPk(director.id_director)){
+      numFilas = 1; // Devuelvo uno para indicar que todo ha ido bien
+    }
+
+    return numFilas;
+  }
 }
 
 module.exports = new DirectorService();

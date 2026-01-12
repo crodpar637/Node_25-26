@@ -66,6 +66,36 @@ class DirectorController {
     }
   }
 
+  async updateDirector(req, res) {
+    // Recupero el id_director de la ruta
+    const id_director = req.params.id;
+    // El objeto del director llega en el body
+    const director = req.body;
+
+    try {
+      const numFilas = await directorService.updateDirector(director);
+
+      if (numFilas == 0) {
+        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
+        return res.status(404).json({
+          ok: false,
+          datos: null,
+          mensaje: "No encontrado: " + director.id_director,
+        });
+      } else {
+        // Al dar status 204 no se devuelva nada
+        res.status(204).send();
+      }
+    } catch (err) {
+      logMensaje("Error en EditDirector:", err);
+      return res.status(500).json({
+        ok: false,
+        datos: null,
+        mensaje: "Error al editar un director",
+      });
+    }
+  }
+
   async getDirectorById(req, res) {
     const id_director = req.params.id;
     try {
