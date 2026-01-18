@@ -18,3 +18,20 @@ Content-Type: application/json
     "photo_url" : "https://goldenglobes.com/wp-content/uploads/2023/11/01-john-ford.jpg?w=2000"
 }
 
+### PUT /api/directors/:id actualiza un director
+PUT http://localhost:3000/api/directors/1
+Content-Type: application/json
+
+{
+    "name": "John Ford",
+    "birth_date" : "1880-12-12",
+    "biography" : "Director muy bueno de peliculas del oeste actualizado",
+    "photo_url" : "https://goldenglobes.com/wp-content/uploads/2023/11/01-john-ford.jpg?w=2000"
+}
+
+### DELETE /api/directors/:id elimina un director
+DELETE http://localhost:3000/api/directors/1
+
+### DELETE /api/directors/:id elimina un director - NOT FOUND(404)
+DELETE http://localhost:3000/api/directors/50
+

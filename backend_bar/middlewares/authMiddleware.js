@@ -21,7 +21,7 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .json({ ok: false, datos: null, mensaje: "Token no proporcionado" });
+      .json({ ok: false, datos: null, mensaje: "No autorizado (falta de credenciales): Token no proporcionado" });
   }
 
   try {
@@ -32,7 +32,7 @@ const verifyToken = (req, res, next) => {
     logMensaje(`Error al verificar el token: ${err.message}`);
     return res
       .status(403)
-      .json({ ok: false, datos: null, mensaje: "Token inválido o expirado" });
+      .json({ ok: false, datos: null, mensaje: "No autorizado: Token inválido o expirado" });
   }
 };
 

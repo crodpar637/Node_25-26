@@ -8,6 +8,7 @@ const { logMensaje } = require("./utils/logger.js");
 
 // Rutas de la API
 const directorRoutes = require("./routes/directorRoutes");
+const movieRoutes = require("./routes/movieRoutes");
 
 // ============================================
 // INICIALIZACIÓN
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // RUTAS - API REST
 // ============================================
 app.use("/api/directors", directorRoutes);
+app.use("/api/movies", movieRoutes);
 
 // ============================================
 // RUTAS - SPA (Catch-all)

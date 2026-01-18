@@ -1,0 +1,38 @@
+### GET /api/movies recupera todas las películas
+GET http://localhost:3000/api/movies
+
+### GET /api/movies/:id recupera una película
+GET http://localhost:3000/api/movies/1
+
+### GET /api/movies/:id recupera una película - NOT FOUND(404)
+GET http://localhost:3000/api/movies/50
+
+### POST /api/movies/ crea una película
+POST http://localhost:3000/api/movies
+Content-Type: application/json
+
+{
+    "title": "The Searchers",
+    "release_date" : "1956-05-26",
+    "director_id" : 1,
+    "genre" : "Western",
+    "synopsis" : "Un clásico del cine del oeste."
+}
+
+### PUT /api/movies/:id actualiza una película
+PUT http://localhost:3000/api/movies/1
+Content-Type: application/json
+
+{
+    "title": "The Searchers - Remastered",
+    "release_date" : "1956-05-26",
+    "director_id" : 1,
+    "genre" : "Western",
+    "synopsis" : "Un clásico del cine del oeste, versión remasterizada."
+}
+
+### DELETE /api/movies/:id elimina una película
+DELETE http://localhost:3000/api/movies/1
+
+### DELETE /api/movies/:id elimina una película - NOT FOUND(404)
+DELETE http://localhost:3000/api/movies/50
