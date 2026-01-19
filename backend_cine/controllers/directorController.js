@@ -3,6 +3,24 @@ const { logMensaje } = require("../utils/logger.js");
 const directorService = require("../services/directorService");
 
 class DirectorController {
+
+  async getDirectorsDataGraph(req, res){
+    try {
+      const directorsData = await directorService.getDirectorsDataGraph();
+      return res.status(200).json({
+        ok: true,
+        datos: directorsData,
+        mensaje: "Datos de directores recuperados correctamente",
+      });
+    } catch (err) {
+      logMensaje("Error en getDirectorsDataGraph:", err);
+      return res.status(500).json({
+        ok: false,
+        datos: null,
+        mensaje: "Error al recuperar datos de directores",
+      });
+    }
+  }
   async getAllDirectors(req, res) {
     try {
       const directors = await directorService.getAllDirectors();

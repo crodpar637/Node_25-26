@@ -9,8 +9,29 @@ const sequelize = require("../config/sequelize.js");
 const models = initModels(sequelize);
 // Recuperar el modelo director
 const Director = models.director;
+const Movie = models.movie;
 
 class DirectorService {
+
+  async getDirectorsDataGraph(){
+    const result = await Movie.findAll({
+        attributes: [
+          "id_director",
+          [sequelize.fn("COUNT", sequelize.col("id_movie")),"total"],
+        ],
+        include: [
+          {
+            model: Director,
+            as: "id_director_director",
+            attributes: ["name"], // Traemos el nombre del director
+          },
+        ],
+        group: ["movie.id_director","id_director_director.name"],
+        raw: true,
+      });
+    return result;
+  }
+
   async getAllDirectors() {
     // Devuelve todos los directores. Ajusta atributos si tu modelo usa otros nombres.
     const result = await Director.findAll();

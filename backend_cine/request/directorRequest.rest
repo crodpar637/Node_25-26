@@ -1,6 +1,9 @@
 ### GET /api/directors recupera todos los directores
 GET http://localhost:3000/api/directors
 
+### GET /api/directors/graph recupera datos de directores para hacer una grafica
+GET http://localhost:3000/api/directors/graph
+
 ### GET /api/directors/:id recupera un director
 GET http://localhost:3000/api/directors/1
 
