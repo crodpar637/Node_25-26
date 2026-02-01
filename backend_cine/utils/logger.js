@@ -1,11 +1,9 @@
 function logMensaje() {
-  console.log(new Date());
+  console.log(new Date(), "----------------------------------");
 
   for (let parametro of arguments){
     console.log(parametro);
   }
-  
-  console.log("----------------------------------");
 }
 
 function logErrorSQL(err){
