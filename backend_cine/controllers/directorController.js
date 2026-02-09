@@ -91,7 +91,7 @@ class DirectorController {
     const director = req.body;
 
     try {
-      const numFilas = await directorService.updateDirector(director);
+      const numFilas = await directorService.updateDirector({ ...director, id_director});
 
       if (numFilas == 0) {
         // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar

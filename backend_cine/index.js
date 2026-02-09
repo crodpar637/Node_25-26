@@ -1,6 +1,8 @@
 // ============================================
 // IMPORTACIONES
 // ============================================
+// Importar fichero de configuración con variables de entorno
+const config = require('./config');
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -14,7 +16,7 @@ const movieRoutes = require("./routes/movieRoutes");
 // INICIALIZACIÓN
 // ============================================
 const app = express();
-const port = process.env.PORT || 3000;
+const port = config.port;
 
 // ============================================
 // MIDDLEWARE - PARSEO
@@ -47,6 +49,11 @@ app.use("/api/movies", movieRoutes);
 // ============================================
 // SERVIDOR
 // ============================================
-app.listen(port, () => {
-  logMensaje(`Servidor escuchando en el puerto ${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    logMensaje(`Servidor escuchando en el puerto ${port}`);
+  });
+}
+
+// Exportamos la aplicación para poder hacer pruebas
+module.exports = app;
