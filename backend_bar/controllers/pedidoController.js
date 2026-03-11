@@ -1,40 +1,12 @@
 // Importar libreria para respuestas
 const Respuesta = require("../utils/respuesta.js");
-// Recuperar función de inicialización de modelos
-const initModels = require("../models/init-models.js").initModels;
-// Crear la instancia de sequelize con la conexión a la base de datos
-const sequelize = require("../config/sequelize.js");
 const { logMensaje } = require("../utils/logger.js");
-
-// Cargar las definiciones del modelo en sequelize
-const models = initModels(sequelize);
-// Recuperar el modelo plato
-const Plato = models.platos;
-// Recuperar el modelo pedido
-const Pedido = models.pedidos;
+const pedidoService = require("../services/pedidoService.js");
 
 class PedidoController {
   async getGraficaPedidos(req, res) {
     try {
-      const ventas = await Pedido.findAll({
-        attributes: [
-          "idplato",
-          [sequelize.fn("SUM", sequelize.col("unidades")), "ventas"],
-          [
-            sequelize.fn("SUM", sequelize.literal("unidades * precio")),
-            "ingresos",
-          ],
-        ],
-        include: [
-          {
-            model: Plato,
-            as: "idplato_plato",
-            attributes: ["nombre", "precio"], // Traemos el nombre del plato
-          },
-        ],
-        group: ["idplato", "nombre", "precio"],
-        raw: true,
-      });
+      const ventas = await pedidoService.getGraficaPedidos();
       res.json(Respuesta.exito(ventas, "Datos de pedidos recuperados"));
     } catch (err) {
       logMensaje("Error al recuperar los datos de los pedidos" + err);
@@ -51,14 +23,7 @@ class PedidoController {
 
   async getAllPedido(req, res) {
     try {
-      const data = await Pedido.findAll({
-        include: [
-          {
-            model: Plato,
-            as: "idplato_plato",
-          },
-        ],
-      }); // Recuperar todos los pedidos
+      const data = await pedidoService.getAllPedido();
       res.status(200).json(Respuesta.exito(data, "Datos de pedidos recuperados"));
     } catch (err) {
       // Handle errors during the model call
