@@ -41,7 +41,7 @@ PORT=3000
 
 ### Instalación y configuración de librerías para manejar la base de datos
 ```
-npm i mysql2 sequelize sequelize-auto
+pnpm i mysql2 sequelize sequelize-auto
 ```
 
 // Configurar ./config/sequelize.js y ./config/sequelize-auto.js con parámetros de bbdd
