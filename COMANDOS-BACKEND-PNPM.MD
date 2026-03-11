@@ -11,6 +11,11 @@ pnpm init
 pnpm install dotenv 
 ```
 
+### Libreria para gestionar variables de entorno en Windows
+```
+pnpm install cross-env 
+```
+
 ### Instalar nodemon 
 ```
 pnpm install --save-dev nodemon
@@ -26,8 +31,8 @@ pnpm install --save-dev nodemon
   ```
 
 ### Crear fichero .env.development con las variables de entorno de desarrollo
-### Este es el fichero que se usa con npm run dev
-### El fichero .env.production se usa con npm start
+### Este es el fichero que se usa con pnpm run dev
+### El fichero .env.production se usa con pnpm start
 ```
 # Configuración de la base de datos
 DB_HOST=localhost
